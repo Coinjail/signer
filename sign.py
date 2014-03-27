@@ -31,7 +31,10 @@ if __name__ == '__main__':
 
         args = parser.parse_args()
         signedTX = signRawTransaction(args.rawTX , args.privKey, args.redeemScript)
-
+        if signedTX is not None:
+            print signedTX
+        else:
+            print 'Error: Check arguments.'
     else: #pipe
         try:
             parser = argparse.ArgumentParser(description='Coinjail transaction signing tool. ( www.coinjail.com )')
@@ -43,11 +46,11 @@ if __name__ == '__main__':
             rawtx = j.get('rawTransaction', '')
             redeemScript = j.get('redeemScript','')
             signedTX = signRawTransaction(rawtx , args.privKey, redeemScript)
+            j['signedTransaction'] = signedTX
+            ret = json.dumps(j)
+            print ret
         except Exception,e:
-            pass
-    if signedTX is not None:
-        print signedTX
-    else:
-        print 'Error: Check arguments.'
+            print 'Error: Check arguments.' , e
+    
 
 
